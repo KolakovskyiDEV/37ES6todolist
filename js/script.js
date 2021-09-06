@@ -13,7 +13,7 @@ const todoController = {
   handleInputs(inputs) {
     const obj = {};
     for (const input of inputs) {
-    obj[input.name] = input.value;
+      obj[input.name] = input.value;
     }
     obj.checkbox = false;
     obj.completed = "false";
@@ -26,20 +26,20 @@ const todoController = {
     arr[index].checkbox = !arr[index].checkbox;
     todoModel.reSetData(arr);
     return arr;
-  },    
+  },
   deletElem(elemDel) {
     let index = Number(elemDel.target.parentElement.id);
     const arr = todoController.getData();
     arr.splice(index, 1);
     todoModel.reSetData(arr)
     return arr;
-    },
+  },
   deletAllElem(delAll) {
     num = 0;
     const arr = todoController.getData();
     todoModel.removeData();
     return arr;
-    }
+  }
 };
 
 const todoModel = {
@@ -51,117 +51,117 @@ const todoModel = {
       localStorage.setItem(this.dbName, JSON.stringify(data));
       return data;
     }
-      const data = [todoItem];
-      localStorage.setItem(this.dbName, JSON.stringify(data));
-      return data;
+    const data = [todoItem];
+    localStorage.setItem(this.dbName, JSON.stringify(data));
+    return data;
   },
   getData() {
-      if (!localStorage.getItem(this.dbName)) return false;
-      return localStorage.getItem(this.dbName);
+    if (!localStorage.getItem(this.dbName)) return false;
+    return localStorage.getItem(this.dbName);
   },
   reSetData(arr) {
-      localStorage.clear();
-      localStorage.setItem(todoModel.dbName, JSON.stringify(arr));
+    localStorage.clear();
+    localStorage.setItem(todoModel.dbName, JSON.stringify(arr));
   },
-   removeData() {
-      localStorage.clear();
+  removeData() {
+    localStorage.clear();
   },
 
 };
 
 const todoView = {
-      form: document.querySelector("#todoForm"),
-      template: document.querySelector("#todoItems"),
-      removeAll: document.querySelector("#todoForm"),
+  form: document.querySelector("#todoForm"),
+  template: document.querySelector("#todoItems"),
+  removeAll: document.querySelector("#todoForm"),
 
   setEvents() {
-      window.addEventListener("load", this.onLoadFunc.bind(this));
-      this.form.addEventListener("submit", this.formSubmit.bind(this));
-      this.template.addEventListener("change", this.checkBoxFunc.bind(this));
-      this.template.addEventListener("click", this.deletElemFunc.bind(this));
-      this.removeAll.addEventListener("click", this.deletAllFunc.bind(this));  
+    window.addEventListener("load", this.onLoadFunc.bind(this));
+    this.form.addEventListener("submit", this.formSubmit.bind(this));
+    this.template.addEventListener("change", this.checkBoxFunc.bind(this));
+    this.template.addEventListener("click", this.deletElemFunc.bind(this));
+    this.removeAll.addEventListener("click", this.deletAllFunc.bind(this));
   },
   formSubmit(e) {
-      e.preventDefault();
-      const inputs = e.target.querySelectorAll("input, textarea");
+    e.preventDefault();
+    const inputs = e.target.querySelectorAll("input, textarea");
 
     for (const input of inputs) {
       if (!input.value.length) return alert("No way you can add this shit");
     }
-      todoController.setData(inputs);
-      const todoItemObject =
+    todoController.setData(inputs);
+    const todoItemObject =
       todoController.getData()[todoController.getData().length - 1];
-      this.renderItem(todoItemObject);
-      e.target.reset();
+    this.renderItem(todoItemObject);
+    e.target.reset();
   },
   onLoadFunc() {
-      if (!localStorage.getItem("saved_data")) return false;
-      num = 0;
-      todoController.getData().forEach((item) => this.renderItem(item));
+    if (!localStorage.getItem("saved_data")) return false;
+    num = 0;
+    todoController.getData().forEach((item) => this.renderItem(item));
   },
   checkBoxFunc(boxCheck) {
-      todoController.makeCheckBox(boxCheck);
-      this.template.textContent = "";
-      todoView.onLoadFunc();
+    todoController.makeCheckBox(boxCheck);
+    this.template.textContent = "";
+    todoView.onLoadFunc();
   },
   deletElemFunc(elemDel) {
     if (elemDel.target.className === 'taskButton') {
       todoController.deletElem(elemDel);
       this.template.innerHTML = '';
       todoView.onLoadFunc();
-  }
+    }
   },
   deletAllFunc(delAll) {
-    
-   if (delAll.target.className === 'taskdeleteAll') {
+
+    if (delAll.target.className === 'taskdeleteAll') {
       todoController.deletAllElem(delAll);
       this.template.innerHTML = '';
-      localStorage.clear();
-        }
+
+    }
   },
   createTemplate(
-      titleText = "",
-      descriptionText = "",
-      completedText = "",
-      checkboxTick = false,
-      buttonText = "Delete element", 
+    titleText = "",
+    descriptionText = "",
+    completedText = "",
+    checkboxTick = false,
+    buttonText = "Delete element",
   ) {
-      const mainWrp = document.createElement("div");
+    const mainWrp = document.createElement("div");
 
-      mainWrp.className = "col-4";
+    mainWrp.className = "col-4";
 
-      const wrp = document.createElement("div");
-      wrp.className = "taskWrapper";
-      wrp.id = `${num++}`;
-      mainWrp.append(wrp);
+    const wrp = document.createElement("div");
+    wrp.className = "taskWrapper";
+    wrp.id = `${num++}`;
+    mainWrp.append(wrp);
 
-      const title = document.createElement("div");
-      title.innerHTML = titleText;
-      title.className = "taskHeading";
-      wrp.append(title);
+    const title = document.createElement("div");
+    title.innerHTML = titleText;
+    title.className = "taskHeading";
+    wrp.append(title);
 
-      const description = document.createElement("div");
-      description.innerHTML = descriptionText;
-      description.className = "taskDescription";
-      wrp.append(description);
+    const description = document.createElement("div");
+    description.innerHTML = descriptionText;
+    description.className = "taskDescription";
+    wrp.append(description);
 
-      const completed = document.createElement("div");
-      completed.innerHTML = completedText;
-      completed.className = "taskCompleted";
-      wrp.append(completed);
+    const completed = document.createElement("div");
+    completed.innerHTML = completedText;
+    completed.className = "taskCompleted";
+    wrp.append(completed);
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.checked = checkboxTick;
-      checkbox.className = "taskCheckbox";
-      wrp.append(checkbox);
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = checkboxTick;
+    checkbox.className = "taskCheckbox";
+    wrp.append(checkbox);
 
-      const button = document.createElement("button");
-      button.innerHTML = buttonText;
-      button.className = "taskButton";
-      wrp.append(button);
+    const button = document.createElement("button");
+    button.innerHTML = buttonText;
+    button.className = "taskButton";
+    wrp.append(button);
 
-      return mainWrp;
+    return mainWrp;
   },
   renderItem({ title, description, completed, checkbox }) {
     const template = this.createTemplate(
@@ -173,13 +173,13 @@ const todoView = {
     document.querySelector("#todoItems").prepend(template);
   },
   creatDeleteAllButt(deleteAllText = 'Delete All') {
-      const deleteAll = document.createElement("button");
-      const dellBut = document.querySelector("#todoForm");
-      deleteAll.innerHTML = deleteAllText;
-      deleteAll.className = "taskdeleteAll";
-      deleteAll.setAttribute('type', 'button');
-      dellBut.append(deleteAll);
-   
+    const deleteAll = document.createElement("button");
+    const dellBut = document.querySelector("#todoForm");
+    deleteAll.innerHTML = deleteAllText;
+    deleteAll.className = "taskdeleteAll";
+    deleteAll.setAttribute('type', 'button');
+    dellBut.append(deleteAll);
+
   }
 };
 todoView.setEvents();
